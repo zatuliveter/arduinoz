@@ -1,15 +1,21 @@
 #include <Arduino.h>
 // test
-int red = 4;
-int yellow = 3;
-int green = 2;
-int beep = 5;
+const int red = 6;
+const int yellow = 5;
+const int green = 3;
+const int beep = 7;
+const int buttonPin = 2;     // номер входа, подключенный к кнопке
+
+bool buttonState;
 
 void setup() {
   pinMode(red, OUTPUT);
   pinMode(yellow, OUTPUT);
   pinMode(green, OUTPUT);
   pinMode(beep, OUTPUT);
+  pinMode(buttonPin, INPUT);
+
+  digitalWrite(red, 1);
 }
 
 void SetLight(bool redSig, bool yellowSig, bool greenSig, int waitTime, int repeatCount, int repeatDelay)
@@ -40,14 +46,24 @@ void SetLight(bool redSig, bool yellowSig, bool greenSig, int waitTime, int repe
   digitalWrite(beep, 0);
 }
 
+
 void loop() {
-  SetLight(0, 0, 1, 3000, 7, 300);
+
+  // считываем значения с входа кнопки
+  buttonState = digitalRead(buttonPin);
+   
+  if (buttonState == 0) {
+    delay(100);
+    return;
+  }
+
+  SetLight(1, 0, 0, 0, 7, 300); //мигающий красный
+    
+  SetLight(0, 1, 0, 1000, 0, 0); //жёлтый
+
+  SetLight(0, 0, 1, 10000, 7, 300); //зеленый
   
-  SetLight(0, 1, 0, 1000, 0, 0);
+  SetLight(0, 1, 0, 1000, 0, 0); //жёлтый
   
-  SetLight(1, 0, 0, 3000, 7, 300);
-  
-  SetLight(0, 1, 0, 3000, 0, 0);
+  SetLight(1, 0, 0, 3000, 0, 300); //красный
 }
-
-
