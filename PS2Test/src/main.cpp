@@ -3,9 +3,13 @@
 
 Controller controller;
 
-byte LeftMotorAPin = 4;
-byte LeftMotorBPin = 5;
+byte LeftMotorAPin = 5;
+byte LeftMotorBPin = 4;
 byte LeftMotorSpeedPin = 3;
+
+byte RightMotorAPin = 8;
+byte RightMotorBPin = 7;
+byte RightMotorSpeedPin = 9;
 
 void setup()
 {
@@ -52,6 +56,19 @@ void loop()
   } else {
     digitalWrite(LeftMotorAPin, 0);
     digitalWrite(LeftMotorBPin, 0);      
+  }
+
+  if (state.RY > 128) {
+      digitalWrite(RightMotorAPin, 0);
+      digitalWrite(RightMotorBPin, 1);
+      analogWrite(RightMotorSpeedPin, (state.RY - 128) * 2);
+  } else if (state.RY < 128) {
+      digitalWrite(RightMotorAPin, 1);
+      digitalWrite(RightMotorBPin, 0);
+      analogWrite(RightMotorSpeedPin, 250 - state.RY * 2);      
+  } else {
+    digitalWrite(RightMotorAPin, 0);
+    digitalWrite(RightMotorBPin, 0);      
   }
 
   delay(50);

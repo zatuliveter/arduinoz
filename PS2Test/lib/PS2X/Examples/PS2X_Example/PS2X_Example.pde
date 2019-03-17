@@ -112,31 +112,28 @@ void loop(){
          
          
      if(ps2x.Button(PSB_PAD_UP)) {         //will be TRUE as long as button is pressed
-       Serial.print("Up held this hard: ");
-       Serial.println(ps2x.Analog(PSAB_PAD_UP), DEC);
+        Serial.print("Up held this hard: ");
+        Serial.println(ps2x.Analog(PSAB_PAD_UP), DEC);
       }
       if(ps2x.Button(PSB_PAD_RIGHT)){
-       Serial.print("Right held this hard: ");
+        Serial.print("Right held this hard: ");
         Serial.println(ps2x.Analog(PSAB_PAD_RIGHT), DEC);
       }
       if(ps2x.Button(PSB_PAD_LEFT)){
-       Serial.print("LEFT held this hard: ");
+        Serial.print("LEFT held this hard: ");
         Serial.println(ps2x.Analog(PSAB_PAD_LEFT), DEC);
       }
       if(ps2x.Button(PSB_PAD_DOWN)){
-       Serial.print("DOWN held this hard: ");
-     Serial.println(ps2x.Analog(PSAB_PAD_DOWN), DEC);
+        Serial.print("DOWN held this hard: ");
+        Serial.println(ps2x.Analog(PSAB_PAD_DOWN), DEC);
       }   
   
     
       vibrate = ps2x.Analog(PSAB_BLUE);        //this will set the large motor vibrate speed based on 
                                               //how hard you press the blue (X) button    
     
-    if (ps2x.NewButtonState())               //will be TRUE if any button changes state (on to off, or off to on)
+    if (ps2x.NewButtonState()) //will be TRUE if any button changes state (on to off, or off to on)
     {
-     
-       
-         
         if(ps2x.Button(PSB_L3))
          Serial.println("L3 pressed");
         if(ps2x.Button(PSB_R3))
@@ -146,8 +143,7 @@ void loop(){
         if(ps2x.Button(PSB_R2))
          Serial.println("R2 pressed");
         if(ps2x.Button(PSB_GREEN))
-         Serial.println("Triangle pressed");
-         
+         Serial.println("Triangle pressed");         
     }   
          
     
@@ -171,12 +167,8 @@ void loop(){
         Serial.print(ps2x.Analog(PSS_RY), DEC); 
         Serial.print(",");
         Serial.println(ps2x.Analog(PSS_RX), DEC); 
-    } 
-    
-    
+    }    
  }
- 
- 
- delay(50);
-     
+  
+ delay(50);     
 }
