@@ -3,13 +3,13 @@
 
 Controller controller;
 
-byte LeftMotorAPin = 5;
-byte LeftMotorBPin = 4;
-byte LeftMotorSpeedPin = 3;
+byte RightMotorAPin = 5;
+byte RightMotorBPin = 4;
+byte RightMotorSpeedPin = 6;
 
-byte RightMotorAPin = 8;
-byte RightMotorBPin = 7;
-byte RightMotorSpeedPin = 9;
+byte LeftMotorAPin = 7;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+byte LeftMotorBPin = 8;
+byte LeftMotorSpeedPin = 9;
 
 void setup()
 {
@@ -17,7 +17,7 @@ void setup()
   pinMode (LeftMotorBPin, OUTPUT);
   pinMode (LeftMotorSpeedPin, OUTPUT);
 
-  Serial.begin(9600);
+  //Serial.begin(9600);
   delay(500);
   
   controller.Setup(); 
@@ -25,19 +25,19 @@ void setup()
 
 void DispalyController(ControllerState state)
 {  
-   Serial.print("LX=");
-   Serial.print(state.LX, DEC);
+   //Serial.print("LX=");
+   //Serial.print(state.LX, DEC);
 
-   Serial.print(" LY=");
-   Serial.print(state.LY, DEC);
+   //Serial.print(" LY=");
+   //Serial.print(state.LY, DEC);
    
-   Serial.print(" RX=");
-   Serial.print(state.RX, DEC);
+   //Serial.print(" RX=");
+   //Serial.print(state.RX, DEC);
    
-   Serial.print(" RY=");
-   Serial.print(state.RY, DEC);
+   //Serial.print(" RY=");
+   //Serial.print(state.RY, DEC);
    
-   Serial.println('.');
+   //Serial.println('.');
 }
 
 void loop()
