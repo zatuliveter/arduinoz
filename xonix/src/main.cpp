@@ -9,7 +9,7 @@
 #include "Arduino.h"
 //#include <ESP8266WiFi.h>
 //WiFiClient client;
-// test
+
 #include <Adafruit_GFX.h>
 //#include <FreeMonoBold12pt7b.h>
 //#include <kongtext4pt7b.h>
