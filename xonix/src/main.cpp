@@ -1,20 +1,12 @@
 // REQUIRES the following Arduino libraries:
-// - DHT Sensor Library: https://github.com/adafruit/DHT-sensor-library
-// - RGB matrix Panel Library: https://github.com/2dom/PxMatrix
-// - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
-// - esp8266 library (nodemcu) found at https://github.com/esp8266/Arduino
-// - package_esp8266com_index.json found at http://arduino.esp8266.com/stable/package_esp8266com_index.json
-// Find All "Great Projects" Videos : https://www.youtube.com/channel/UCCC8DuqicBtP3A_aC53HYDQ/videos
+// - Adafruit GFX Library by Adafruit: https://github.com/adafruit/Adafruit-GFX-Library
+// - PxMatrix LED MATRIX library by Dominic Buchstaller: https://github.com/2dom/PxMatrix
 
 #include "Arduino.h"
-//#include <ESP8266WiFi.h>
-//WiFiClient client;
-
 #include <Adafruit_GFX.h>
-//#include <FreeMonoBold12pt7b.h>
-//#include <kongtext4pt7b.h>
 #include <PxMatrix.h>
 #include <Ticker.h>
+
 Ticker display_ticker;
 
 #define P_LAT 16
@@ -24,8 +16,6 @@ Ticker display_ticker;
 #define P_D 12
 #define P_OE 2
 
-
-//PxMATRIX display(matrix_width,matrix_height,P_LAT, P_OE,P_A,P_B,P_C);
 PxMATRIX display(64,32,P_LAT, P_OE,P_A,P_B,P_C,P_D);
 
 // Some standard colors
