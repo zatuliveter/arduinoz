@@ -10,10 +10,11 @@
 Display* pDisplay;
 Rocket* pRocket;
 
-const int ballCount = 3;
+const int ballCount = 5;
 Ball* pBalls[ballCount];
 
 void setup() {
+  pDisplay = new Display();
   pRocket = new Rocket(pDisplay);
 
   for(int i=0; i<ballCount; i++)

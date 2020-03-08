@@ -19,7 +19,8 @@ byte Display::MaxY = 32;
 Display::Display() 
 {
   pMatrix = new PxMATRIX(MaxX, MaxY, P_LAT, P_OE, P_A, P_B, P_C, P_D);
-
+  pDisplayTicker = new Ticker();
+  
   // Define your display layout here, e.g. 1/8 step
   pMatrix->begin(16);
   pMatrix->setFastUpdate(true);
