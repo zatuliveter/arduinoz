@@ -2,10 +2,12 @@
 #include <Servo.h>
 #include <NewPing.h>
 
-AF_DCMotor motor(4);
+AF_DCMotor motor(2);
 Servo servo1;
 NewPing sonar(A1 /*Trig*/, A0 /*Echo*/, 70 /*max distance*/);
- 
+
+int Left = 105;
+int Right = 40;
 
 void setup()
 {  
@@ -25,23 +27,21 @@ void loop()
     motor.run(RELEASE);
     motor.run(FORWARD);
     motor.setSpeed(210);
-    servo1.write(66);
+    servo1.write(67);
   }
   else
   {
     motor.run(BACKWARD);  
-    motor.setSpeed(255);
+    motor.setSpeed(255); 
     delay(800);
-    servo1.write(105);
+    
+    if (random(0, 2) == 0)
+      servo1.write(Left);
+    else
+      servo1.write(Right);
+      
     delay(800);
   }
    
   delay(50);
-  
-  //motor.run(RELEASE);
-  //motor.run(BACKWARD);
-  //motor.setSpeed(150);
-  //servo1.write(40);
-  //delay(2500);
-
 }
