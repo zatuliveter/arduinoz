@@ -11,8 +11,8 @@ struct Rocket
 {
 private:  
   byte y;
+  byte x;
   int color;
-  int my;
 
   Display* pDisplay;
 
