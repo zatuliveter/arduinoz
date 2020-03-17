@@ -23,6 +23,10 @@ void setup() {
   }
 
   Serial.begin(115200);
+
+  // pinMode(0, OUTPUT);
+  // pinMode(3, OUTPUT);
+  pinMode(A0, INPUT);
 }
 
 void loop() {
@@ -43,4 +47,5 @@ void loop() {
   // display.drawRect(x, y, 1, 1, display.color565(r, g, b));
   
   delay(50);
+  //Serial.println("");
 }
