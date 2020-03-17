@@ -1,5 +1,12 @@
 /*
  * Тест для нашего 1.8" монитора 128*160 точек
+ * Заметки: экран работает если только подключить все контакты, 
+ *   причем 11-й и 13-й явно не используются, а без них экран не работает.
+ * #define TFT_CS        10
+   #define TFT_RST       -1 // Or set to -1 and connect to Arduino RESET pin
+   #define TFT_DC         8
+   #define TFT_MOSI 11  // Data out
+   #define TFT_SCLK 13  // Clock out
  */
 
 
@@ -12,8 +19,8 @@
 #define TFT_CS        10
 #define TFT_RST       -1 // Or set to -1 and connect to Arduino RESET pin
 #define TFT_DC         8
-#define TFT_MOSI 11  // Data out
-#define TFT_SCLK 13  // Clock out
+//#define TFT_MOSI 11  // Data out
+//#define TFT_SCLK 13  // Clock out
 
 //Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
