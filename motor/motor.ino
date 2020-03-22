@@ -15,6 +15,8 @@ int MotorForward = 12;
 int MotorBack = 13;
 int MotorPWM = 11;
 
+String state = "s" ;
+
 void setup()
 {
   Serial.begin(9600);
@@ -52,57 +54,84 @@ void loop()
 }
 
 void bluetooth()
-{  
+{
+  int frontSonarValue = FrontSonar.ping_cm();
+  if (frontSonarValue == 0) frontSonarValue = 100;
+  
+  int rearSonarValue = RearSonar.ping_cm();
+  if (rearSonarValue == 0) rearSonarValue = 100;
+  
   if (Bluetooth.available())
   {
-    String val = Bluetooth.readString();
-    Serial.print(val);
-    
+    String val = Bluetooth.readString();    
     val = val.substring(0, 1);
-    
-    if (val == "f") { 
-      servo1.write(Center);
-      Motor(210); 
-    }
-    
-    if (val == "b") { 
-      servo1.write(Center);
-      Motor(-210);
-    } 
-    
-    if (val == "l") { 
-      servo1.write(Left);
-      Motor(210); 
-    }  
-    
-    if (val == "r") { 
-      servo1.write(Right);
-      Motor(210); 
-    }
-    
-    delay(2000); 
+    state = val;    
   }
 
-  servo1.write(Center);
-  Motor(0); 
+  
+  if (state == "f" and frontSonarValue < 30)
+  {
+    state = "s";
+  }
+
+  if (state == "b" and rearSonarValue < 30)
+  {
+    state = "s";
+  }
+
+  if (state == "r" and frontSonarValue < 30)
+  {
+    state = "s";  
+  }
+
+  if (state == "l" and frontSonarValue < 30)
+  {
+    state = "s";  
+  }
+  
+  if (state == "s") { 
+    servo1.write(Center);
+    Motor(0);
+  }
+  
+  if (state == "f") { 
+    servo1.write(Center);
+    Motor(210); 
+  }
+  
+  if (state == "b") { 
+    servo1.write(Center);
+    Motor(-210);
+  } 
+  
+  if (state == "l") { 
+    servo1.write(Left);
+    Motor(210); 
+  }  
+  
+  if (state == "r") { 
+    servo1.write(Right);
+    Motor(210);
+  }
 }
 
 void sonar()
 {
   int frontSonarValue = FrontSonar.ping_cm();
   int rearSonarValue = RearSonar.ping_cm();
+  
   //Serial.println(s);
 
   if (frontSonarValue > 50 || frontSonarValue == 0)
   {
-    //вперёд
-    Motor(210);
+    //назад
+    Motor(-210);
     servo1.write(67);
   }
   else
   {
-    //назад
-    Motor(-210);
+    //вперёд
+    Motor(210);
     delay(800);
 
     if (random(0, 2) == 0)
