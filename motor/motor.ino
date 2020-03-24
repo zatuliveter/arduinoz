@@ -4,7 +4,7 @@
 
 Servo servo1;
 NewPing FrontSonar(2 /*Trig*/, 3 /*Echo*/, 70 /*max distance*/);
-NewPing RearSonar(5 /*Trig*/, 4 /*Echo*/, 70 /*max distance*/);
+NewPing BackSonar(5 /*Trig*/, 4 /*Echo*/, 70 /*max distance*/);
 SoftwareSerial Bluetooth(6, 7); // RX, TX
 
 int Right = 105;
@@ -16,6 +16,14 @@ int MotorBack = 13;
 int MotorPWM = 11;
 
 String state = "s" ;
+
+struct Pos
+{
+  int x = 0;
+  int y = 0;
+};
+
+Pos pos;
 
 void setup()
 {
@@ -49,105 +57,69 @@ void Motor(int val) {
 
 void loop()
 {
-  bluetooth();
-  //sonar();
-}
-
-void bluetooth()
-{
   int frontSonarValue = FrontSonar.ping_cm();
   if (frontSonarValue == 0) frontSonarValue = 100;
   
-  int rearSonarValue = RearSonar.ping_cm();
-  if (rearSonarValue == 0) rearSonarValue = 100;
+  int backSonarValue = BackSonar.ping_cm();
+  if (backSonarValue == 0) backSonarValue = 100;
+
+  pos = GetPos(pos);
+
+  int servoPos = map(pos.x, -40, 40, Left, Right);
+  servo1.write(servoPos);
+  
+  int motorVal = map(pos.y, -40, 40, -210, 210);
+  Motor(motorVal);
+}
+
+Pos GetPos(Pos pos)
+{
+  char input;
+  String inputStr;
   
   if (Bluetooth.available())
   {
-    String val = Bluetooth.readString();    
-    val = val.substring(0, 1);
-    state = val;    
-  }
+    input = Bluetooth.read();
+    //Serial.println(input);
+    if (input == '$')
+    {
+      while(true)
+      {
+        input = Bluetooth.read();
+        if (input == ';') break;
+        inputStr = inputStr + input;
+      }
+      inputStr.trim();
+      //Serial.println(inputStr);
 
-  
-  if (state == "f" and frontSonarValue < 30)
-  {
-    state = "s";
-  }
-
-  if (state == "b" and rearSonarValue < 30)
-  {
-    state = "s";
-  }
-
-  if (state == "r" and frontSonarValue < 30)
-  {
-    state = "s";  
-  }
-
-  if (state == "l" and frontSonarValue < 30)
-  {
-    state = "s";  
+      int x;
+      int y;
+      if (inputStr != "") 
+      {
+        x = getValue(inputStr, ' ', 0).toInt();
+        y = getValue(inputStr, ' ', 1).toInt();        
+      }
+      
+      if (x != 0) pos.x = x;
+      if (y != 0) pos.y = y;      
+    }
   }
   
-  if (state == "s") { 
-    servo1.write(Center);
-    Motor(0);
-  }
-  
-  if (state == "f") { 
-    servo1.write(Center);
-    Motor(210); 
-  }
-  
-  if (state == "b") { 
-    servo1.write(Center);
-    Motor(-210);
-  } 
-  
-  if (state == "l") { 
-    servo1.write(Left);
-    Motor(210); 
-  }  
-  
-  if (state == "r") { 
-    servo1.write(Right);
-    Motor(210);
-  }
+  return pos;
 }
 
-void sonar()
+String getValue(String data, char separator, int index)
 {
-  int frontSonarValue = FrontSonar.ping_cm();
-  int rearSonarValue = RearSonar.ping_cm();
-  
-  //Serial.println(s);
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
 
-  if (frontSonarValue > 50 || frontSonarValue == 0)
-  {
-    //назад
-    Motor(-210);
-    servo1.write(67);
-  }
-  else
-  {
-    //вперёд
-    Motor(210);
-    delay(800);
-
-    if (random(0, 2) == 0)
-      servo1.write(Left);
-    else
-      servo1.write(Right);
-
-    if (rearSonarValue < 20 && rearSonarValue != 0)
-    {
-      Motor(210);
-      servo1.write(105);
-      delay(800);
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
     }
-
-    delay(800);
-  }
-
-  delay(50);
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
