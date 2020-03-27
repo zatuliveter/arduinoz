@@ -2,10 +2,10 @@
 
 SoftwareSerial Bluetooth(2, 3); // RX, TX
     
-int Motor1Forward = 10;
-int Motor1Back = 11;
-int Motor2Forward = 9;
-int Motor2Back = 6;
+int LeftMotorForward = 10;
+int LeftMotorBack = 11;
+int RightMotorForward = 9;
+int RightMotorBack = 6;
 
 String state = "s" ;
 
@@ -23,10 +23,10 @@ void setup()
 
   Bluetooth.begin(9600);
   
-  pinMode(Motor1Forward, OUTPUT);
-  pinMode(Motor1Back, OUTPUT);
-  pinMode(Motor2Forward, OUTPUT);
-  pinMode(Motor2Back, OUTPUT);
+  pinMode(LeftMotorForward, OUTPUT);
+  pinMode(LeftMotorBack, OUTPUT);
+  pinMode(RightMotorForward, OUTPUT);
+  pinMode(RightMotorBack, OUTPUT);
 }
 
 
@@ -34,22 +34,37 @@ void loop()
 {  
   pos = GetPos(pos);
 
-  int m1 = map(pos.y, -40, 40, -250, 250);
+  int m1 = map(pos.y, -40, 40, -250, 250);  
+  int m2 = map(pos.x, -40, 40, -250, 250);
   
-  if ( m1 > 0 ) {    
-    analogWrite(Motor1Forward, m1); 
-    analogWrite(Motor2Forward, m1); 
-    digitalWrite(Motor1Back, 0); 
-    digitalWrite(Motor2Back, 0);     
+  int leftMotor = -m2;
+  int rightMotor = m2;
+ 
+  leftMotor += m1; 
+  rightMotor += m1;
+  
+  if (leftMotor > 250) leftMotor = 250;
+  if (rightMotor > 250) rightMotor = 250;
+  if (leftMotor < -250) leftMotor = -250;
+  if (rightMotor < -250) rightMotor = -250;
+  
+  if ( leftMotor > 0 ) {    
+    analogWrite(LeftMotorForward, leftMotor);  
+    digitalWrite(LeftMotorBack, 0);     
   }
   else {    
-    analogWrite(Motor1Back, -m1); 
-    analogWrite(Motor2Back, -m1);  
-    digitalWrite(Motor1Forward, 0); 
-    digitalWrite(Motor2Forward, 0);     
+    analogWrite(LeftMotorBack, -leftMotor);  
+    digitalWrite(LeftMotorForward, 0); 
   }
   
-  //int m2 = map(pos.y, -40, 40, 250, -250);
+  if ( rightMotor > 0 ) {    
+    analogWrite(RightMotorForward, rightMotor);  
+    digitalWrite(RightMotorBack, 0);     
+  }
+  else {    
+    analogWrite(RightMotorBack, -rightMotor);  
+    digitalWrite(RightMotorForward, 0); 
+  }
 }
 
 String fixString(String str)
