@@ -35,7 +35,7 @@ void loop()
   pos = GetPos(pos);
 
   int m1 = map(pos.y, -40, 40, -250, 250);  
-  int m2 = map(pos.x, -40, 40, -250, 250);
+  int m2 = map(pos.x, -40, 40, -150, 150);
   
   int leftMotor = -m2;
   int rightMotor = m2;
@@ -111,12 +111,9 @@ Pos GetPos(Pos pos)
       int y;
       if (inputStr != "") 
       {
-        x = getValue(inputStr, ' ', 0).toInt();
-        y = getValue(inputStr, ' ', 1).toInt();        
+        pos.x = getValue(inputStr, ' ', 0).toInt();
+        pos.y = getValue(inputStr, ' ', 1).toInt();        
       }
-      
-      if (x != 0) pos.x = x;
-      if (y != 0) pos.y = y;      
     }
   }
   
