@@ -22,6 +22,7 @@ void setup()
   //Serial.begin(9600);
 
   Bluetooth.begin(9600);
+  Bluetooth.print("AT+NAMELego-Car");
   
   pinMode(LeftMotorForward, OUTPUT);
   pinMode(LeftMotorBack, OUTPUT);
