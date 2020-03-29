@@ -72,6 +72,25 @@ void loop()
   Motor(motorVal);
 }
 
+
+String fixString(String str)
+{
+  char validChars[] = " -0123456789";
+  String res = "";
+  for(int i=0; i < str.length(); i++)
+  {
+    char c = str.charAt(i);
+    for(int j=0; j<12; j++)
+    {
+      if (c == validChars[j]){
+        res += c;
+        break;
+      }
+    }
+  }
+  return res;
+}
+
 Pos GetPos(Pos pos)
 {
   char input;
@@ -89,19 +108,18 @@ Pos GetPos(Pos pos)
         if (input == ';') break;
         inputStr = inputStr + input;
       }
-      inputStr.trim();
+      
+      inputStr = fixString(inputStr);
+            
       //Serial.println(inputStr);
-
+      
       int x;
       int y;
       if (inputStr != "") 
       {
-        x = getValue(inputStr, ' ', 0).toInt();
-        y = getValue(inputStr, ' ', 1).toInt();        
+        pos.x = getValue(inputStr, ' ', 0).toInt();
+        pos.y = getValue(inputStr, ' ', 1).toInt();        
       }
-      
-      if (x != 0) pos.x = x;
-      if (y != 0) pos.y = y;      
     }
   }
   
