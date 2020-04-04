@@ -35,8 +35,8 @@ void loop()
 {  
   pos = GetPos(pos);
 
-  int m1 = map(pos.y, -40, 40, -250, 250);  
-  int m2 = map(pos.x, -40, 40, -150, 150);
+  int m1 = map(pos.y, -40, 40, 250, -250);  
+  int m2 = map(pos.x, -40, 40, -200, 200);
   
   int leftMotor = -m2;
   int rightMotor = m2;
