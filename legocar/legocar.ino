@@ -1,25 +1,30 @@
 #include <SoftwareSerial.h>
+#include <Servo.h>
 
-SoftwareSerial Bluetooth(2, 3); // RX, TX
+SoftwareSerial Bluetooth(2, 4); // RX, TX
+Servo dipperServo; 
     
-int LeftMotorForward = 10;
+int LeftMotorForward = 6;
 int LeftMotorBack = 11;
-int RightMotorForward = 9;
-int RightMotorBack = 6;
+int RightMotorForward = 5;
+int RightMotorBack = 3;
+int dipperPin = 9;
 
-String state = "s" ;
+//String state = "s" ;
 
 struct Pos
 {
   int x = 0;
   int y = 0;
+  int button = 0;
 };
 
 Pos pos;
 
 void setup()
 {
-  //Serial.begin(9600);
+  Serial.begin(9600);
+  dipperServo.attach(dipperPin);
 
   Bluetooth.begin(9600);
   Bluetooth.print("AT+NAMELego-Car");
@@ -28,6 +33,7 @@ void setup()
   pinMode(LeftMotorBack, OUTPUT);
   pinMode(RightMotorForward, OUTPUT);
   pinMode(RightMotorBack, OUTPUT);
+  //pinMode(dipperPin, OUTPUT);
 }
 
 
@@ -35,8 +41,8 @@ void loop()
 {  
   pos = GetPos(pos);
 
-  int m1 = map(pos.y, -40, 40, 250, -250);  
-  int m2 = map(pos.x, -40, 40, -200, 200);
+  int m1 = map(pos.x, 100, -100, 250, -250);  
+  int m2 = map(pos.y, 100, -100, -150, 150);
   
   int leftMotor = -m2;
   int rightMotor = m2;
@@ -66,73 +72,50 @@ void loop()
     analogWrite(RightMotorBack, -rightMotor);  
     digitalWrite(RightMotorForward, 0); 
   }
-}
 
-String fixString(String str)
-{
-  char validChars[] = " -0123456789";
-  String res = "";
-  for(int i=0; i < str.length(); i++)
-  {
-    char c = str.charAt(i);
-    for(int j=0; j<12; j++)
-    {
-      if (c == validChars[j]){
-        res += c;
-        break;
-      }
-    }
+  
+  if ( pos.button == 1 ) {    
+    dipperServo.write(100);     
   }
-  return res;
+  
+  if ( pos.button == 2 ) {    
+    dipperServo.write(250);     
+  }
+  
 }
 
 Pos GetPos(Pos pos)
 {
-  char input;
-  String inputStr;
-  
-  if (Bluetooth.available())
-  {
-    input = Bluetooth.read();
-    //Serial.println(input);
-    if (input == '$')
+  if (Bluetooth.available() > 0)
+  {  
+    String value = Bluetooth.readStringUntil('#');
+    
+    if (value.length() == 7)
     {
-      while(true)
-      {
-        input = Bluetooth.read();
-        if (input == ';') break;
-        inputStr = inputStr + input;
-      }
+      float angle = toRadians(value.substring(0, 3).toFloat());
       
-      inputStr = fixString(inputStr);
-            
-      //Serial.println(inputStr);
+      //Serial.print("angle=");
+      //Serial.println(angle);
+  
+      int strength = value.substring(3, 6).toInt();
       
-      int x;
-      int y;
-      if (inputStr != "") 
-      {
-        pos.x = getValue(inputStr, ' ', 0).toInt();
-        pos.y = getValue(inputStr, ' ', 1).toInt();        
-      }
+      //Serial.print("strength=");
+      //Serial.println(strength);
+      
+      int button = value.substring(6, 7).toInt();
+      Serial.println(value);
+      Serial.println(button);
+         
+      pos.x = strength * cos(angle);
+      pos.y = strength * sin(angle);  
+      pos.button = button; 
     }
   }
   
   return pos;
 }
 
-String getValue(String data, char separator, int index)
-{
-    int found = 0;
-    int strIndex[] = { 0, -1 };
-    int maxIndex = data.length() - 1;
-
-    for (int i = 0; i <= maxIndex && found <= index; i++) {
-        if (data.charAt(i) == separator || i == maxIndex) {
-            found++;
-            strIndex[0] = strIndex[1] + 1;
-            strIndex[1] = (i == maxIndex) ? i+1 : i;
-        }
-    }
-    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+const float pi = 3.14159267;
+float toRadians(float degrees) {
+  return degrees / 360 * 2 * pi;
 }
