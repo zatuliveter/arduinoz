@@ -17,6 +17,7 @@ unsigned long bright_timer;
 uint8_t prefix[] = {'A', 'd', 'a'}, hi, lo, chk, i;  // кодовое слово Ada для связи
 #include <FastLED.h>
 CRGB leds[NUM_LEDS];  // создаём ленту
+byte buffer[3];
 
 void ledTest(byte r, byte g, byte b)
 {
@@ -81,14 +82,12 @@ void loop() {
   for (uint8_t i = 0; i < NUM_LEDS; i++) {
     
     // читаем данные для каждого цвета
-    while (!Serial.available());    
-    leds[i].r = Serial.read();
-    
-    while (!Serial.available());
-    leds[i].g = Serial.read();
-    
-    while (!Serial.available());    
-    leds[i].b = Serial.read();
+
+    if (Serial.readBytes((char*)buffer, 3) < 3) break;
+
+    leds[i].r = buffer[0];
+    leds[i].g = buffer[1]; 
+    leds[i].b = buffer[2];
   }
   
   FastLED.show();  // записываем цвета в ленту
