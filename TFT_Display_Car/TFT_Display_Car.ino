@@ -21,47 +21,52 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 void setup(void) {  
   tft.initR(INITR_GREENTAB);
 }
+ 
+
+void drawWheel(int x, int y) { 
+  int wheelsColor = tft.color565(150, 150, 150);
+  int tiresColor = tft.color565(110, 110, 110);
+ 
+
+  tft.drawCircle(x, y, 9, wheelsColor); 
+  tft.fillCircle(x, y, 8, tiresColor); 
+  tft.fillCircle(x, y, 5, wheelsColor);
+}
+
+void drawBody() {
+  tft.drawLine(29, 40, 29, 110, ST77XX_BLUE);
+  tft.drawLine(29, 40, 65, 40, ST77XX_BLUE);
+  tft.drawLine(65, 40, 65, 80, ST77XX_BLUE);
+  tft.drawLine(65, 80, 55, 95, ST77XX_BLUE);
+  tft.drawLine(55, 95, 55, 110, ST77XX_BLUE);
+  tft.drawLine(55, 110, 30, 110, ST77XX_BLUE);
+}
+
+void drawDetails() {
+  tft.drawSquare
+}
 
 void loop() {  
   tft.fillScreen(ST77XX_BLACK);
-  testLines();
   
-  //tft.drawLine(0, 0, 100, 50, ST77XX_BLUE);
+  int roadColor = tft.color565(100, 100, 100);    
+  tft.drawLine(20, 0, 20, 160, roadColor); //дорога   
 
-  //tft.drawLine(X1, Y1, X2, Y2, COLOR);
+  drawWheel(20, 50);
+  drawWheel(20, 100);
+  drawBody();
+  
+  //tft.drawLine() //корпус машины 
   
   //tft.drawLine(20, 140, 20, 80, ST77XX_RED);
   //tft.drawLine(20, 140, 90, 140, ST77XX_RED);
   //tft.drawLine(90, 140, 90, 80, ST77XX_RED);
-  
-  tft.drawLine(90, 80, 20, 80, ST77XX_BLUE);
-  tft.drawLine(20, 80, 55, 30, ST77XX_BLUE);
-  tft.drawLine(55, 30, 90, 80, ST77XX_BLUE);
+  //
+  //tft.drawLine(20, 80, 55, 30, ST77XX_BLUE);
+  //tft.drawLine(55, 30, 90, 80, ST77XX_BLUE);
 
-  tft.fillTriangle(22, 78, 55, 32, 88, 78, ST77XX_RED);
-  //tft.fillRect(20, 80, 90, 140, ST77XX_RED);
+  //tft.fillTriangle(20, 80, 55, 30, 90, 80, ST77XX_BLUE);
+  //tft.drawRect(20, 140, 90, 80, ST77XX_YELLOW);
   
   delay(1000000);
-}
-
-void testLines()
-{
-  float i = 0;
-  while(true) 
-  {
-    int x = sin(i) * 64 + 64;
-    int y = cos(i*2.2) * 80 + 80;
-    int x1 = sin(i*3.3) * 64 + 64;
-    int y1 = cos(i*4.4) * 80 + 80;
-
-    uint16_t color = 
-      tft.color565(int(i*112)%155 + 100, 
-                   int(i*9)%155 + 100, 
-                   int(i*41)%155 + 100
-                  );
-    
-    tft.drawRect(x, y, x1, y1, color);
-    
-    i = i + 0.0030 ;
-  }
 }

@@ -27,17 +27,15 @@ void loop() {
   
   //tft.drawLine(0, 0, 100, 50, ST77XX_BLUE);
 
-  //tft.drawLine(X1, Y1, X2, Y2, COLOR);
-  
+  //tft.drawLine(X1, Y1, X2, Y2, COLOR);  
   tft.drawLine(20, 140, 20, 80, ST77XX_RED);
   tft.drawLine(20, 140, 90, 140, ST77XX_RED);
   tft.drawLine(90, 140, 90, 80, ST77XX_RED);
   tft.drawLine(90, 80, 20, 80, ST77XX_BLUE);
   tft.drawLine(20, 80, 55, 30, ST77XX_BLUE);
   tft.drawLine(55, 30, 90, 80, ST77XX_BLUE);
-
   tft.fillTriangle(20, 80, 55, 30, 90, 80, ST77XX_BLUE);
-  tft.fillSquare(20, 140, 90, 140, 90, 80, 20, 80 ST77XX_YELLOW);
+  tft.drawRect(20, 140, 90, 80, ST77XX_YELLOW);
   
   delay(1000000);
 }
