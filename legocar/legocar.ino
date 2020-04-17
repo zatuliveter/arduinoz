@@ -41,8 +41,8 @@ void loop()
 {  
   pos = GetPos(pos);
 
-  int m1 = map(pos.x, 100, -100, 250, -250);  
-  int m2 = map(pos.y, 100, -100, -150, 150);
+  int m1 = map(pos.x, 100, -100, 150, -150);  
+  int m2 = map(pos.y, -100, 100, -250, 250);
   
   int leftMotor = -m2;
   int rightMotor = m2;
@@ -76,10 +76,15 @@ void loop()
   
   if ( pos.button == 1 ) {    
     dipperServo.write(100);     
-  }
-  
+  }  
   if ( pos.button == 2 ) {    
-    dipperServo.write(250);     
+    dipperServo.write(165); 
+  }
+  if ( pos.button == 3 ) {    
+    dipperServo.write(50);
+  }
+  if ( pos.button == 4 ) {    
+    dipperServo.write(200);        
   }
   
 }
