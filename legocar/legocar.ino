@@ -2,13 +2,15 @@
 #include <Servo.h>
 
 SoftwareSerial Bluetooth(2, 4); // RX, TX
-Servo dipperServo; 
-    
+Servo dipperServo;
+Servo captureServo;
+     
 int LeftMotorForward = 6;
 int LeftMotorBack = 11;
 int RightMotorForward = 5;
 int RightMotorBack = 3;
 int dipperPin = 9;
+int capturePin = 10;
 
 //String state = "s" ;
 
@@ -20,11 +22,14 @@ struct Pos
 };
 
 Pos pos;
+int dipperPos = 200;
+int capturePos = 200;
 
 void setup()
 {
   Serial.begin(9600);
   dipperServo.attach(dipperPin);
+  captureServo.attach(capturePin);
 
   Bluetooth.begin(9600);
   Bluetooth.print("AT+NAMELego-Car");
@@ -73,27 +78,30 @@ void loop()
     digitalWrite(RightMotorForward, 0); 
   }
 
+  //Serial.println(pos.button);
   
-  if ( pos.button == 1 ) {    
-    dipperServo.write(100);     
-  }  
-  if ( pos.button == 2 ) {    
-    dipperServo.write(165); 
-  }
-  if ( pos.button == 3 ) {    
-    dipperServo.write(50);
-  }
-  if ( pos.button == 4 ) {    
-    dipperServo.write(200);        
-  }
+  if ( pos.button == 1 ) dipperPos = dipperPos + 5;
+  if ( pos.button == 2 ) dipperPos = dipperPos - 5;
+  if ( dipperPos > 200 ) dipperPos = 200;
+  if ( dipperPos < 50 ) dipperPos = 50;  
+  dipperServo.write(dipperPos);
   
+  if ( pos.button == 3 ) capturePos = capturePos + 10;
+  if ( pos.button == 4 ) capturePos = capturePos - 10;
+  if ( capturePos > 200 ) capturePos = 200;
+  if ( capturePos < 50 ) capturePos = 50;  
+  captureServo.write(capturePos); 
+    
 }
 
 Pos GetPos(Pos pos)
 {
+  pos.button = 0;
+  
   if (Bluetooth.available() > 0)
   {  
     String value = Bluetooth.readStringUntil('#');
+    Serial.println(value);
     
     if (value.length() == 7)
     {
@@ -108,8 +116,8 @@ Pos GetPos(Pos pos)
       //Serial.println(strength);
       
       int button = value.substring(6, 7).toInt();
-      Serial.println(value);
-      Serial.println(button);
+      //Serial.println(value);
+      //Serial.println(button);
          
       pos.x = strength * cos(angle);
       pos.y = strength * sin(angle);  
