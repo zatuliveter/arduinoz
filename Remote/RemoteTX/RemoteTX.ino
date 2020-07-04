@@ -17,6 +17,7 @@ struct RadioPacket // Any packet up to 32 bytes can be sent.
 
 NRFLite _radio;
 RadioPacket _radioData;
+RadioPacket _sentData;
 
 /*
 Radio    Arduino
@@ -47,30 +48,59 @@ void setup() {
 
 void loop() {
   
-  _radioData.Button1 = digitalRead(A0);
-  _radioData.Button2 = digitalRead(A3);
+  _radioData.Button1 = !digitalRead(A0);
+  _radioData.Button2 = !digitalRead(A3);
   
   bool switchPos1 = digitalRead(A4);
   bool switchPos2 = digitalRead(A5);
   
-  _radioData.Switch = switchPos1 ? 0 : switchPos2 ? 2 : 1;
+  _radioData.Switch = switchPos1 ? switchPos2 ? 1 : 0 : 2;
   
-  _radioData.Analog1 = analogRead(A1);
-  _radioData.Analog2 = analogRead(A2);
+  _radioData.Analog1 = analogRead(A2);
+  _radioData.Analog2 = analogRead(A1);
 
   digitalWrite(3, _radioData.Button1);
 
-  delay(100);
+  if (!areTheSame(_sentData, _radioData))
+  {
+    if (_radio.send(DESTINATION_RADIO_ID, &_radioData, sizeof(_radioData))) // Note how '&' must be placed in front of the variable name.
+    {
+      _sentData.Button1 = _radioData.Button1;
+      _sentData.Button2 = _radioData.Button2;
+      _sentData.Switch = _radioData.Switch;
+      _sentData.Analog1 = _radioData.Analog1;
+      _sentData.Analog2 = _radioData.Analog2;
+    
+      pintData(_sentData);
+      
+      Serial.println("...Success");
+    }
+    else
+    {
+      Serial.println("...Failed");
+    }
+  }
+  
+  delay(1);
 }
 
-void pintData()
+bool areTheSame(RadioPacket a, RadioPacket b)
+{  
+  return a.Button1 == b.Button1
+      && a.Button2 == b.Button2
+      && a.Switch  == b.Switch
+      && abs(a.Analog1 - b.Analog1) <= 5
+      && abs(a.Analog2 - b.Analog2) <= 5;
+}
+
+void pintData(RadioPacket p)
 {
-  Serial.print("b1="); Serial.print(_radioData.Button1); 
-  Serial.print(", b2="); Serial.print(_radioData.Button2); 
-  Serial.print(", s="); Serial.print(_radioData.Switch); 
+  Serial.print("b1="); Serial.print(p.Button1); 
+  Serial.print(", b2="); Serial.print(p.Button2); 
+  Serial.print(", s="); Serial.print(p.Switch); 
   
-  Serial.print(", a1="); Serial.print(_radioData.Analog1); 
-  Serial.print(", a2="); Serial.print(_radioData.Analog2); 
+  Serial.print(", a1="); Serial.print(p.Analog1); 
+  Serial.print(", a2="); Serial.print(p.Analog2); 
   
   Serial.println("");
 }
