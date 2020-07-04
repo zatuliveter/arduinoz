@@ -32,7 +32,7 @@ GND   -> GND
 void setup() {
   Serial.begin(115200);
     
-  if (!_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN))
+  if (!_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE250KBPS, 100))
   {
       Serial.println("Cannot communicate with radio");
       while (1); // Wait here forever.
