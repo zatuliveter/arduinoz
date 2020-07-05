@@ -1,6 +1,8 @@
 #include <SPI.h>
 #include <NRFLite.h>
 
+const bool DEBUG = false;
+
 const static uint8_t RADIO_ID = 1;             // Our radio's id.
 const static uint8_t DESTINATION_RADIO_ID = 0; // Id of the radio we will transmit to.
 const static uint8_t PIN_RADIO_CE = 9;
@@ -32,11 +34,11 @@ GND   -> GND
 */
 
 void setup() {
-  Serial.begin(115200);
+  if (DEBUG) Serial.begin(115200);
     
   if (!_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE250KBPS, 100))
   {
-      Serial.println("Cannot communicate with radio");
+      if (DEBUG) Serial.println("Cannot communicate with radio");
       while (1); // Wait here forever.
   }
   
@@ -44,6 +46,7 @@ void setup() {
   pinMode(A3, INPUT_PULLUP);
   pinMode(A4, INPUT_PULLUP);
   pinMode(A5, INPUT_PULLUP);
+  pinMode(3, OUTPUT);
 }
 
 void loop() {
@@ -58,9 +61,8 @@ void loop() {
   
   _radioData.Analog1 = analogRead(A2);
   _radioData.Analog2 = analogRead(A1);
-
-  digitalWrite(3, _radioData.Button1);
-
+  
+  digitalWrite(3, 0);
   if (!areTheSame(_sentData, _radioData))
   {
     if (_radio.send(DESTINATION_RADIO_ID, &_radioData, sizeof(_radioData))) // Note how '&' must be placed in front of the variable name.
@@ -73,11 +75,13 @@ void loop() {
     
       pintData(_sentData);
       
-      Serial.println("...Success");
+      digitalWrite(3, 1);
+      
+      if (DEBUG) Serial.println("...Success");
     }
     else
     {
-      Serial.println("...Failed");
+      if (DEBUG) Serial.println("...Failed");
     }
   }
   
@@ -95,6 +99,8 @@ bool areTheSame(RadioPacket a, RadioPacket b)
 
 void pintData(RadioPacket p)
 {
+  if (!DEBUG) return;
+  
   Serial.print("b1="); Serial.print(p.Button1); 
   Serial.print(", b2="); Serial.print(p.Button2); 
   Serial.print(", s="); Serial.print(p.Switch); 
