@@ -1,47 +1,56 @@
 #include <Arduino.h>
 #include <Servo.h>
-#include <NewPing.h>
-#include <SoftwareSerial.h>
 
-Servo servo1;
+#include <SPI.h>
+#include <NRFLite.h>
+
+const static uint8_t RADIO_ID = 0;       // Our radio's id.  The transmitter will send to this id.
+const static uint8_t PIN_RADIO_CE = 9;
+const static uint8_t PIN_RADIO_CSN = 10;
+
+struct RadioPacket // Any packet up to 32 bytes can be sent.
+{
+  bool Button1;
+  bool Button2;
+  byte Switch;    
+  short Analog1;
+  short Analog2;
+};
+
+NRFLite _radio;
+RadioPacket _radioData;
+
+Servo sterlingServo;
 Servo dipperServo;
-NewPing FrontSonar(2 /*Trig*/, 3 /*Echo*/, 70 /*max distance*/);
-NewPing BackSonar(5 /*Trig*/, 4 /*Echo*/, 70 /*max distance*/);
-SoftwareSerial Bluetooth(6, 7); // RX, TX
 
 int Right = 105;
 int Left = 40;
 int Center = 67;
-int dipperPin = 10;
+int dipperPin = 5;
+int steeringPin = 3;
     
-int MotorForward = 12;
-int MotorBack = 13;
-int MotorPWM = 11;
-
-String state = "s" ;
-
-struct Pos
-{
-  int x = 0;
-  int y = 0;
-  int button = 0;
-};
-
-Pos pos;
+int MotorForward = 8;
+int MotorBack = 7;
+int MotorPWM = 6;
 
 void setup()
 {
-  Serial.begin(9600);
-  servo1.attach(9);
+  Serial.begin(115200);
+    
+  if (!_radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN, NRFLite::BITRATE250KBPS, 100))
+  {
+      Serial.println("Cannot communicate with radio");
+      while (1); // Wait here forever.
+  }
+  
+  sterlingServo.attach(steeringPin);
   dipperServo.attach(dipperPin);
-
-  Bluetooth.begin(9600);
-  Bluetooth.print("AT+NAMESport-Car");
   
   pinMode(MotorForward, OUTPUT);
   pinMode(MotorBack, OUTPUT);
   pinMode(MotorPWM, OUTPUT);
   pinMode(dipperPin, OUTPUT);
+  pinMode(steeringPin, OUTPUT);
 }
 
 void Motor(int val) {
@@ -64,54 +73,21 @@ void Motor(int val) {
 
 void loop()
 {
-  int frontSonarValue = FrontSonar.ping_cm();
-  if (frontSonarValue == 0) frontSonarValue = 100;
+  while (_radio.hasData())
+  {
+    _radio.readData(&_radioData); // Note how '&' must be placed in front of the variable name.
+    //printData();
+  }
   
-  int backSonarValue = BackSonar.ping_cm();
-  if (backSonarValue == 0) backSonarValue = 100;
-
-  pos = GetPos(pos);
-
-  int servoPos = map(pos.x, -100, 100, Left, Right);
-  servo1.write(servoPos);
-  
-  int motorVal = map(pos.y, -100, 100, -210, 210);
+  int motorVal = map(_radioData.Analog1, 0, 1023, 250, -250);
   Motor(motorVal);
-
-  switch (pos.button) {
+  
+  int sterlingPos = map(_radioData.Analog2, 0, 1023, Left, Right);
+  sterlingServo.write(sterlingPos);
+  
+  switch (_radioData.Switch) {
     case 1: dipperServo.write(10); break;
     case 2: dipperServo.write(80); break;
-    case 3: dipperServo.write(100); break;
-    case 4: dipperServo.write(131); break;    
+    case 3: dipperServo.write(131); break;  
   }  
-}
-
-Pos GetPos(Pos pos)
-{
-  if (Bluetooth.available() > 0)
-  {  
-    String value = Bluetooth.readStringUntil('#');
-    
-    if (value.length() == 7)
-    {
-      float angle = toRadians(value.substring(0, 3).toFloat());
-
-      int strength = value.substring(3, 6).toInt();
-
-      int button = value.substring(6, 7).toInt();
-      Serial.println(value);
-      Serial.println(button);
-
-      pos.x = strength * cos(angle);
-      pos.y = strength * sin(angle);  
-      pos.button = button; 
-    }
-  }
-
-  return pos;
-}
-
-const float pi = 3.14159267;
-float toRadians(float degrees) {
-  return degrees / 360 * 2 * pi;
 }
