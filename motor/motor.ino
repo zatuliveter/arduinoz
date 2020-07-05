@@ -79,7 +79,7 @@ void loop()
     //printData();
   }
   
-  int motorVal = map(_radioData.Analog1, 0, 1023, 250, -250);
+  int motorVal = map(_radioData.Analog1, 0, 1023, 120, -200);
   Motor(motorVal);
   
   int sterlingPos = map(_radioData.Analog2, 0, 1023, Left, Right);
