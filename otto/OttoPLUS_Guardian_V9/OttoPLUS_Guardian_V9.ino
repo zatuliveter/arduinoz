@@ -34,9 +34,11 @@ RIGHT FOOT 5 |---     ---| LEFT FOOT 4
 #define PIN_YR 3 //servo[1]  right leg
 #define PIN_RL 4 //servo[2]  left foot
 #define PIN_RR 5 //servo[3]  right foot
-#define PIN_Trigger  8  //TRIGGER pin (8)
-#define PIN_Echo     9  //ECHO pin (9)
-#define PIN_Buzzer  13 //BUZZER pin (13)
+#define PIN_Trigger  10  //TRIGGER pin (10)
+#define PIN_Echo     11  //ECHO pin (11)
+#define PIN_Buzzer  12 //BUZZER pin (13)
+#define PIN_RX TX //RX pin (TX)
+#define PIN_TX RX //TX pin (RX)
 //---------------------------------------------------------
 #define PIN_Touch1 A5
 ///////////////////////////////////////////////////////////////////
@@ -61,8 +63,13 @@ bool alarmActivated = false;
 int initDistance = 999;
 unsigned long int arming_symbol =   0b00111111100001100001100001111111;
 unsigned long int alarm_symbol =    0b00111111111111111111111111111111;
-int angryPos2[4] =    {90, 90, 70, 110};
-int headLeft2[4] =    {110, 110, 90, 90};
+int angryPos2[4] =    {-90, -90, 70, 110};
+int headLeft2[4] =    {
+  
+  
+  
+  
+  110, 110, 90, 90};
 int headRight2[4] =   {70, 70, 90, 90};
 ///////////////////////////////////////////////////////////////////
 //-- Setup ------------------------------------------------------//

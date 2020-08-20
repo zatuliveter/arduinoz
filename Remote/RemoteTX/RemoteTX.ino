@@ -42,27 +42,34 @@ void setup() {
       while (1); // Wait here forever.
   }
   
-  pinMode(A0, INPUT_PULLUP);
+  pinMode(2, OUTPUT);
+  digitalWrite(2, HIGH);
+  
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT_PULLUP);
   pinMode(A3, INPUT_PULLUP);
-  pinMode(A4, INPUT_PULLUP);
-  pinMode(A5, INPUT_PULLUP);
+  pinMode(4, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
+  
   pinMode(3, OUTPUT);
 }
 
 void loop() {
   
-  _radioData.Button1 = !digitalRead(A0);
+  _radioData.Button1 = !digitalRead(A2);
   _radioData.Button2 = !digitalRead(A3);
   
-  bool switchPos1 = digitalRead(A4);
-  bool switchPos2 = digitalRead(A5);
+  bool switchPos1 = digitalRead(4);
+  bool switchPos2 = digitalRead(5);
   
   _radioData.Switch = switchPos1 ? switchPos2 ? 1 : 0 : 2;
   
-  _radioData.Analog1 = analogRead(A2);
+  _radioData.Analog1 = analogRead(A0);
   _radioData.Analog2 = analogRead(A1);
   
   digitalWrite(3, 0);
+        
   if (!areTheSame(_sentData, _radioData))
   {
     if (_radio.send(DESTINATION_RADIO_ID, &_radioData, sizeof(_radioData))) // Note how '&' must be placed in front of the variable name.

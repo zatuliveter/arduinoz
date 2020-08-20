@@ -1,15 +1,6 @@
-/*
- * Тест для нашего 1.8" монитора 128*160 точек
- * Заметки: экран работает если только подключить все контакты, 
- *   причем 11-й и 13-й явно не используются, а без них экран не работает.
- * #define TFT_CS        10
-   #define TFT_RST       -1 // Or set to -1 and connect to Arduino RESET pin
-   #define TFT_DC         8
-   #define TFT_MOSI 11  // Data out
-   #define TFT_SCLK 13  // Clock out
- */
-#include <Adafruit_GFX.h>    // Core graphics library
-#include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7735.h>  
 #include <SPI.h>
 
 #define TFT_CS        10

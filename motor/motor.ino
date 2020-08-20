@@ -21,13 +21,12 @@ NRFLite _radio;
 RadioPacket _radioData;
 
 Servo sterlingServo;
-Servo dipperServo;
-
 int Right = 105;
 int Left = 40;
 int Center = 67;
-int dipperPin = 5;
+int headlightsPin = 5;
 int steeringPin = 3;
+int breakPin = 4;
     
 int MotorForward = 8;
 int MotorBack = 7;
@@ -44,13 +43,13 @@ void setup()
   }
   
   sterlingServo.attach(steeringPin);
-  dipperServo.attach(dipperPin);
   
   pinMode(MotorForward, OUTPUT);
   pinMode(MotorBack, OUTPUT);
   pinMode(MotorPWM, OUTPUT);
-  pinMode(dipperPin, OUTPUT);
   pinMode(steeringPin, OUTPUT);
+  pinMode(headlightsPin, OUTPUT);
+  pinMode(breakPin, OUTPUT);
 }
 
 void Motor(int val) {
@@ -82,12 +81,17 @@ void loop()
   int motorVal = map(_radioData.Analog1, 0, 1023, 120, -200);
   Motor(motorVal);
   
+  if (motorVal > 0) 
+    digitalWrite(breakPin, 1);
+  else
+    digitalWrite(breakPin, 0);
+  
   int sterlingPos = map(_radioData.Analog2, 0, 1023, Left, Right);
   sterlingServo.write(sterlingPos);
   
   switch (_radioData.Switch) {
-    case 1: dipperServo.write(10); break;
-    case 2: dipperServo.write(80); break;
-    case 3: dipperServo.write(131); break;  
+    case 0: analogWrite(headlightsPin, 0); break;
+    case 1: analogWrite(headlightsPin, 100); break;
+    case 2: analogWrite(headlightsPin, 255); break;  
   }  
 }
