@@ -22,34 +22,60 @@ void setup() {
 
 void loop() 
 {
-  mx.setPoint(1, 1, true);
-  
-   //drawhead(1, 0);
-   //drawear(1, 22);
-   //drawear(0, 10);
+   drawhead(-2, 3);
+   drawear(-3, 7);
+   drawear(-3, 0);
+   draweye(4, 6);
+   draweye(4, 11);
    delay(350);    
 }
 
 void drawhead(int x, int y)
 {
+  mx.setPoint(x + 5, y + 10, true);
+  mx.setPoint(x + 5, y + 9, true);
+  mx.setPoint(x + 5, y + 8, true);
+  mx.setPoint(x + 5, y + 7, true);
+  mx.setPoint(x + 5, y + 6, true);
   mx.setPoint(x + 5, y + 5, true);
   mx.setPoint(x + 5, y + 4, true);
   mx.setPoint(x + 5, y + 3, true);
-  mx.setPoint(x + 4, y + 2, true);
-  mx.setPoint(x + 3, y + 2, true);
-  mx.setPoint(x + 2, y + 2, true);
-  mx.setPoint(x + 1, y + 3, true);
-  mx.setPoint(x + 1, y + 4, true);
-  mx.setPoint(x + 1, y + 5, true);
-  mx.setPoint(x + 3, y + 6, true);
-  mx.setPoint(x + 4, y + 6, true);
-  mx.setPoint(x + 2, y + 6, true);
+  mx.setPoint(x + 5, y + 2, true);
+  mx.setPoint(x + 5, y + 1, true);
+  
+  mx.setPoint(x + 6, y + 0, true);
+  mx.setPoint(x + 7, y + 0, true);
+  mx.setPoint(x + 8, y + 0, true);
+  
+  mx.setPoint(x + 9, y + 10, true);
+  mx.setPoint(x + 9, y + 9, true);
+  mx.setPoint(x + 9, y + 8, true);
+  mx.setPoint(x + 9, y + 7, true);
+  mx.setPoint(x + 9, y + 6, true);
+  mx.setPoint(x + 9, y + 5, true);
+  mx.setPoint(x + 9, y + 4, true);
+  mx.setPoint(x + 9, y + 3, true);
+  mx.setPoint(x + 9, y + 2, true);
+  mx.setPoint(x + 9, y + 1, true);
+  
+  mx.setPoint(x + 6, y + 11, true);
+  mx.setPoint(x + 7, y + 11, true);
+  mx.setPoint(x + 8, y + 11, true);
 }
 
 void drawear(int x, int y)
 {
+  mx.setPoint(x + 5, y + 4, true);
+  mx.setPoint(x + 4, y + 5, true);
+  mx.setPoint(x + 5, y + 6, true);
   mx.setPoint(x + 5, y + 5, true);
-  mx.setPoint(x + 6, y + 6, true);
-  mx.setPoint(x + 3, y + 5, true);
 }
+
+void draweye(int x, int y)
+{
+  mx.setPoint(x, y, true);
+  mx.setPoint(x + 1, y, true);
+  mx.setPoint(x + 2, y, true);
+}
+  
    
