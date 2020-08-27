@@ -5,10 +5,9 @@
 
 CRGB strip[LED_COUNT];
 
-void setup ()  {
-
+void setup ()  
+{
   FastLED.addLeds<WS2812, LED_PIN, RGB>(strip, LED_COUNT);
-
 }
 
 float color = 0;
@@ -20,7 +19,7 @@ void loop ()
   {
     strip[i] = CHSV(i*color + dif, 255, 120);
   }
-  
+
   FastLED.show();  
   dif += 1;
   color += 0.01;
@@ -28,11 +27,12 @@ void loop ()
   if (color > 15000){
     color == 0;
   }
-  
+
   if (dif > 15000){
     dif == 0;
   }
 }
+
 
 
 
