@@ -28,6 +28,7 @@ void loop ()
   if (color > 15000){
     color == 0;
   }
+  
   if (dif > 15000){
     dif == 0;
   }
