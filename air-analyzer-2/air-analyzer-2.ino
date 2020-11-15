@@ -9,7 +9,6 @@
 #include <SoftwareSerial.h>
 
 
-
 SoftwareSerial pmsSerial(2, 3);
  
 PMS pms(pmsSerial);
