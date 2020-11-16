@@ -51,13 +51,16 @@ void displayData()
   tft.setTextSize(4);
   
   tft.print("PM 1.0:  ");
-  tft.println(data.PM_AE_UG_1_0);
+  tft.print(data.PM_AE_UG_1_0);
+  tft.println("  "); // previous numbers cleanum
   
   tft.print("PM 2.5:  ");
-  tft.println(data.PM_AE_UG_2_5);
+  tft.print(data.PM_AE_UG_2_5);
+  tft.println("  "); // previous numbers cleanum
   
   tft.print("PM 10.0: ");
-  tft.println(data.PM_AE_UG_10_0);
+  tft.print(data.PM_AE_UG_10_0);
+  tft.println("  "); // previous numbers cleanum
 }
 
 void printToSerial()
