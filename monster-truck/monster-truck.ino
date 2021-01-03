@@ -51,7 +51,8 @@ void setup()
   }
   
   sterlingServo.attach(steringPin);
-  
+
+  // Change PWM frequency for D5 & D6:
   TCCR0B = TCCR0B & B11111000 | B00000001; // for PWM frequency of 62500.00 Hz
   
   pinMode(MotorForward, OUTPUT);
