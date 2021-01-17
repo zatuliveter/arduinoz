@@ -1,13 +1,10 @@
 
-#include <Adafruit_GFX.h>
-#include <Adafruit_ST7735.h>  
+#include <Adafruit_GFX.h>  
 #include <SPI.h>
 
 #define TFT_CS        10
 #define TFT_RST       -1 // Or set to -1 and connect to Arduino RESET pin
 #define TFT_DC         8
-
-Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
 void setup(void) {  
   tft.initR(INITR_GREENTAB);
@@ -46,12 +43,11 @@ void testLines()
     int y1 = cos(i*4.4) * 80 + 80;
 
     uint16_t color = 
-      tft.color565(int(i*112)%155 + 100, 
+       
                    int(i*9)%155 + 100, 
                    int(i*41)%155 + 100
                   );
     
-    tft.drawRect(x, y, x1, y1, color);
     
     i = i + 0.0030 ;
   }
