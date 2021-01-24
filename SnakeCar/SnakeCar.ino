@@ -127,8 +127,8 @@ void loop()
   if (servo1 > servo0) servo1 -= 2;
   if (servo1 < servo0) servo1 += 2;
    
-  if (servo2 > servo0) servo2 -= 1.5;
-  if (servo2 < servo0) servo2 += 0.5;
+  if (servo2 > servo0) servo2 -= 1.25;
+  if (servo2 < servo0) servo2 += 1.25;
  
   int s0 = map(servo0, 0, 1023, 230, 410);
   int s1 = map(servo1, 0, 1023, 255, 420);
